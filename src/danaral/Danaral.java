@@ -40,6 +40,22 @@ public class Danaral {
     static final String OCTOMBRIE = "oct";
     static final String NOIEMBRIE = "nov";
     static final String DECEMBRIE = "dec";
+    
+    static final String[][] ALTERNATIVE_LUNI=new String[][]{
+        {"ian."},
+        {"feb."},
+        {"mar."},
+        {"apr."},
+        {"mai.","mai"},
+        {"iun."},
+        {"iul."},
+        {"aug."},
+        {"sept."},
+        {"oct."},
+        {"nov."},
+        {"dec."}
+    }; 
+    
     formPrincipal guiPrincipal;
     RaportTahografForm tahografForm;
     EvenimenteForm evenimenteForm;
