@@ -51,7 +51,6 @@ public class RaportZi {
      * practic functia asta primeste ca parametru variabila lis2 din exemplul de
      * mai sus, liUri sunt toate <li> urile,
      */
-
     final boolean spuneKilometraj(String linie) {
         //li.text().contains("activityDayDistance")
         return (linie.contains("activityDayDistance"))
@@ -60,14 +59,14 @@ public class RaportZi {
 
     public RaportZi() {
     }
-    
-    private String incepereProgram="";
-    private String incheiereProgram="";
-    private String totalOreConducere="";
-    private String totalOreAltaMunca="";
-    private String totalOreOdihna="";
-    private String totalOreLucrate="";
-    
+
+    private String incepereProgram = "";
+    private String incheiereProgram = "";
+    private String totalOreConducere = "";
+    private String totalOreAltaMunca = "";
+    private String totalOreOdihna = "";
+    private String totalOreLucrate = "";
+
     private String totalOreConduseNoaptea = "";
     private String totalOreAltaMuncaNoaptea = "";
     private String totalOreLucrateNoaptea = "";
@@ -83,8 +82,8 @@ public class RaportZi {
                 total += timp;
             }
         }
-        int ore = (int)TimeUnit.MILLISECONDS.toHours(total)%24;
-        int minute = (int)TimeUnit.MILLISECONDS.toMinutes(total) % 60;
+        int ore = (int) TimeUnit.MILLISECONDS.toHours(total) % 24;
+        int minute = (int) TimeUnit.MILLISECONDS.toMinutes(total) % 60;
 
         String oreString = Integer.toString(ore);
         String minuteString = Integer.toString(minute);
@@ -109,7 +108,7 @@ public class RaportZi {
                 total += timp;
             }
         }
-        long ore = TimeUnit.MILLISECONDS.toHours(total)%24;
+        long ore = TimeUnit.MILLISECONDS.toHours(total) % 24;
         long minute = TimeUnit.MILLISECONDS.toMinutes(total) % 60;
 
         String oreString = Long.toString(ore);
@@ -135,7 +134,7 @@ public class RaportZi {
                 total += timp;
             }
         }
-        long ore = TimeUnit.MILLISECONDS.toHours(total)%24;
+        long ore = TimeUnit.MILLISECONDS.toHours(total) % 24;
         long minute = TimeUnit.MILLISECONDS.toMinutes(total) % 60;
 
         String oreString = Long.toString(ore);
@@ -153,13 +152,13 @@ public class RaportZi {
 
     private String calculateTotalOreLucrate(List<ActivitateCondus> activitati) {
         long total = 0;
-        for (ActivitateCondus activitateCondus:activitati){
-            int ore=Integer.valueOf(activitateCondus.timpTotal.replace("h", "").split(":")[0]);
+        for (ActivitateCondus activitateCondus : activitati) {
+            int ore = Integer.valueOf(activitateCondus.timpTotal.replace("h", "").split(":")[0]);
             int minute = Integer.valueOf(activitateCondus.timpTotal.replace("h", "").split(":")[1]);
             long timp = TimeUnit.HOURS.toMillis(ore) + TimeUnit.MINUTES.toMillis(minute);
             total += timp;
         }
-        long ore = TimeUnit.MILLISECONDS.toHours(total)%24;
+        long ore = TimeUnit.MILLISECONDS.toHours(total) % 24;
         long minute = TimeUnit.MILLISECONDS.toMinutes(total) % 60;
 
         String oreString = Long.toString(ore);
@@ -185,18 +184,20 @@ public class RaportZi {
                 total += timp;
             }
         }
-        long ore=TimeUnit.MILLISECONDS.toHours(total)%24;
-        long minute=TimeUnit.MILLISECONDS.toMinutes(total) % 60;
-        
-        String oreString=Long.toString(ore);
-        String minuteString=Long.toString(minute);
-        
-        if (ore<10)
-            oreString="0"+oreString;
-        if (minute<10)
-            minuteString="0"+minuteString;
-        
-        return oreString+":"+minuteString+"h";
+        long ore = TimeUnit.MILLISECONDS.toHours(total) % 24;
+        long minute = TimeUnit.MILLISECONDS.toMinutes(total) % 60;
+
+        String oreString = Long.toString(ore);
+        String minuteString = Long.toString(minute);
+
+        if (ore < 10) {
+            oreString = "0" + oreString;
+        }
+        if (minute < 10) {
+            minuteString = "0" + minuteString;
+        }
+
+        return oreString + ":" + minuteString + "h";
     }
 
     private String calculateTotalOre_AltaMunca(List<ActivitateCondus> activitati) {
@@ -209,7 +210,7 @@ public class RaportZi {
                 total += timp;
             }
         }
-        long ore = TimeUnit.MILLISECONDS.toHours(total)%24;
+        long ore = TimeUnit.MILLISECONDS.toHours(total) % 24;
         long minute = TimeUnit.MILLISECONDS.toMinutes(total) % 60;
 
         String oreString = Long.toString(ore);
@@ -234,18 +235,18 @@ public class RaportZi {
             total += timp;
         }
         total = TimeUnit.HOURS.toMillis(24) - Math.abs(total);
-        
-        int ore = (int)TimeUnit.MILLISECONDS.toHours(total)%24;
-        int minute = (int)TimeUnit.MILLISECONDS.toMinutes(total) % 60;
-        
-        if (ore<0){
-            ore=24+ore;
+
+        int ore = (int) TimeUnit.MILLISECONDS.toHours(total) % 24;
+        int minute = (int) TimeUnit.MILLISECONDS.toMinutes(total) % 60;
+
+        if (ore < 0) {
+            ore = 24 + ore;
         }
-        if (minute<0){
+        if (minute < 0) {
             ore--;
-            minute=60+minute;
+            minute = 60 + minute;
         }
-        
+
         String oreString = Integer.toString(ore);
         String minuteString = Integer.toString(minute);
 
@@ -256,7 +257,7 @@ public class RaportZi {
             minuteString = "0" + minuteString;
         }
         return oreString + ":" + minuteString + "h";
-        
+
     }
 
     public String getIncepereProgram() {
@@ -266,59 +267,64 @@ public class RaportZi {
     public String getIncheiereProgram() {
         return incheiereProgram;
     }
-    public String getTotalOreConduse(){
+
+    public String getTotalOreConduse() {
         return totalOreConducere;
     }
-    public String getTotalOreAltaMunca(){
+
+    public String getTotalOreAltaMunca() {
         return totalOreAltaMunca;
     }
-    public String getTotalOreLucrate(){
-        return !"".equals(totalOreLucrate) ? totalOreLucrate:calculateTotalOreLucrate(programCondus);
+
+    public String getTotalOreLucrate() {
+        return !"".equals(totalOreLucrate) ? totalOreLucrate : calculateTotalOreLucrate(programCondus);
     }
-    public String getTotalOreOdihna(){
-        return !"".equals(totalOreOdihna) ? totalOreOdihna:calculateOdihna(programCondus);
+
+    public String getTotalOreOdihna() {
+        return !"".equals(totalOreOdihna) ? totalOreOdihna : calculateOdihna(programCondus);
     }
-    public String getTotalOreConduseNoaptea(){
+
+    public String getTotalOreConduseNoaptea() {
         return totalOreConduseNoaptea;
     }
-    public String getTotalOreAltaMuncaNoaptea(){
+
+    public String getTotalOreAltaMuncaNoaptea() {
         return totalOreAltaMuncaNoaptea;
     }
-    public String getTotalOreLucrateNoaptea(){
+
+    public String getTotalOreLucrateNoaptea() {
         return totalOreLucrateNoaptea;
     }
-    
-    
-    
+
     public RaportZi(RaportZi zi) {
-        try{
-            data=zi.data;
+        try {
+            data = zi.data;
             incepereProgram = zi.programCondus.get(0).oraInceput;
             incheiereProgram = zi.programCondus.get(zi.programCondus.size() - 1).oraIncheiere;
-            totalOreConducere=calculateTotalOreConduse(zi.programCondus);
-            totalOreAltaMunca=calculateTotalOre_AltaMunca(zi.programCondus);
-            totalOreLucrate=calculateTotalOreLucrate(zi.programCondus);
-            totalOreOdihna=calculateOdihna(zi.programCondus);
-            
-            totalOreAltaMuncaNoaptea=calculateOreAltaMuncaNoaptea(zi.programCondus);
-            totalOreConduseNoaptea=calculateOreConduseNoaptea(zi.programCondus);
-            totalOreLucrateNoaptea=calculateOreLucrateNoaptea(zi.programCondus);
-            
-            ZI_INACTIVA=zi.ZI_INACTIVA;
-            kilometri=zi.kilometri;
-        }catch(Exception ex) {
-            data=zi.data;
+            totalOreConducere = calculateTotalOreConduse(zi.programCondus);
+            totalOreAltaMunca = calculateTotalOre_AltaMunca(zi.programCondus);
+            totalOreLucrate = calculateTotalOreLucrate(zi.programCondus);
+            totalOreOdihna = calculateOdihna(zi.programCondus);
+
+            totalOreAltaMuncaNoaptea = calculateOreAltaMuncaNoaptea(zi.programCondus);
+            totalOreConduseNoaptea = calculateOreConduseNoaptea(zi.programCondus);
+            totalOreLucrateNoaptea = calculateOreLucrateNoaptea(zi.programCondus);
+
+            ZI_INACTIVA = zi.ZI_INACTIVA;
+            kilometri = zi.kilometri;
+        } catch (Exception ex) {
+            data = zi.data;
             incepereProgram = "";
             incheiereProgram = "";
             totalOreConducere = "00:00h";
             totalOreAltaMunca = "00:00h";
             totalOreLucrate = "00:00h";
             totalOreOdihna = "24:00h";
-            
-            totalOreAltaMuncaNoaptea="00:00h";
-            totalOreLucrateNoaptea="00:00h";
-            totalOreConduseNoaptea="00:00h";
-            
+
+            totalOreAltaMuncaNoaptea = "00:00h";
+            totalOreLucrateNoaptea = "00:00h";
+            totalOreConduseNoaptea = "00:00h";
+
             ZI_INACTIVA = zi.ZI_INACTIVA;
             kilometri = zi.kilometri;
         }
@@ -351,23 +357,24 @@ public class RaportZi {
         }
 
     }
+
     private boolean condusZiuaSiNoaptea(ActivitateCondus activitate) {
         int ora_inc = Integer.valueOf(activitate.oraInceput.split(":")[0]);
         int ora_fin = Integer.valueOf(activitate.oraIncheiere.split(":")[0]);
         if (activitate.nocturn) {
             return false;
         }
-        boolean condusZiua=true;
-        boolean condusNoaptea=false;
-        for (Integer ora:Danaral.oreNoapte){
-            if (ora_inc==ora){
-                condusZiua=false;
+        boolean condusZiua = true;
+        boolean condusNoaptea = false;
+        for (Integer ora : Danaral.oreNoapte) {
+            if (ora_inc == ora) {
+                condusZiua = false;
             }
-            if (ora_fin==ora){
-                condusNoaptea=true;
+            if (ora_fin == ora) {
+                condusNoaptea = true;
             }
         }
-        
+
         return condusZiua && condusNoaptea;
     }
 
@@ -408,7 +415,7 @@ public class RaportZi {
                         || li.text().contains(Danaral.WORKING_TOKEN)) {
                     ActivitateCondus activitateCondus = new ActivitateCondus(li.text());
                     if (activitateCondus.eValida()) {
-/*
+                        /*
                         int orainc = Integer.valueOf(activitateCondus.oraInceput.split(":")[0]);
                         orainc++;
                         orainc %= 24;
@@ -420,7 +427,7 @@ public class RaportZi {
                         System.out.println("caca "+data+" ->"+oraInceput+":"+oraIncheiere);
                         activitateCondus.oraInceput = oraInceput;
                         activitateCondus.oraIncheiere = oraIncheiere;
-*/
+                         */
 
                         programCondus.add(activitateCondus);
                     }
@@ -442,8 +449,8 @@ public class RaportZi {
                     //          + separat[1].toString());
                     programCondus.set(i, separat[1]);
                     programCondus.add(i + 1, separat[0]);
-                   // System.out.println("Am format : " + separat[1].toString() + "si\n"
-                      //    + separat[0].toString());
+                    // System.out.println("Am format : " + separat[1].toString() + "si\n"
+                    //    + separat[0].toString());
                 }
             }
         }
@@ -457,16 +464,16 @@ public class RaportZi {
         }
     }
 
-    public String getKilometri(){
+    public String getKilometri() {
         return kilometri;
     }
-    
+
     /**
      *
      * @param luna Ian, Feb, Mar ... etc
      * @return 01, 02, 03 ... etc
      */
-    static String extrageLuna(String luna) throws DateTimeException{
+    static String extrageLuna(String luna) throws DateTimeException {
         switch (luna.toLowerCase()) {
             case (Danaral.IANUARIE):
                 return "01";
@@ -493,7 +500,15 @@ public class RaportZi {
             case (Danaral.DECEMBRIE):
                 return "12";
         }
-        throw new DateTimeException("am primit ca luna textul "+luna);
+        for (int i = 0; i < Danaral.ALTERNATIVE_LUNI.length; i++) {
+            for (int j = 0; j < Danaral.ALTERNATIVE_LUNI[i].length; j++) {
+                if (Danaral.ALTERNATIVE_LUNI[i][j].equals(luna)) {
+                    String rezultat = ((i + 1) < 10 ? "0" : "")+(i+1);
+                    return rezultat;
+                }
+            }
+        }
+        throw new DateTimeException("am primit ca luna textul " + luna);
     }
 
     /**
