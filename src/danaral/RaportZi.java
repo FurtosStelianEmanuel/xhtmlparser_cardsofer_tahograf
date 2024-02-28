@@ -413,7 +413,7 @@ public class RaportZi {
             for (Element li : zi) {
                 if (li.text().contains(Danaral.DRIVING_TOKEN)
                         || li.text().contains(Danaral.WORKING_TOKEN)) {
-                    ActivitateCondus activitateCondus = new ActivitateCondus(li.text());
+                    ActivitateCondus activitateCondus = new ActivitateCondus(li.text(), data);
                     if (activitateCondus.eValida()) {
                         /*
                         int orainc = Integer.valueOf(activitateCondus.oraInceput.split(":")[0]);

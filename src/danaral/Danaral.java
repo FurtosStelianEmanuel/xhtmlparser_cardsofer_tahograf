@@ -7,6 +7,9 @@ package danaral;
 import com.itextpdf.text.DocumentException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -21,7 +24,6 @@ public class Danaral {
     Cititor cititor;
     static Danaral ref;
 
-   
     static String ACTIVITIES_TOKEN = "Activities on";
     static String WORKING_TOKEN = "work for";
     static String LI_TOKEN = "li";
@@ -40,13 +42,13 @@ public class Danaral {
     static final String OCTOMBRIE = "oct";
     static final String NOIEMBRIE = "nov";
     static final String DECEMBRIE = "dec";
-    
-    static final String[][] ALTERNATIVE_LUNI=new String[][]{
+
+    static final String[][] ALTERNATIVE_LUNI = new String[][]{
         {"ian."},
         {"feb."},
         {"mar."},
         {"apr."},
-        {"mai.","mai"},
+        {"mai.", "mai"},
         {"iun."},
         {"iul."},
         {"aug."},
@@ -54,32 +56,32 @@ public class Danaral {
         {"oct."},
         {"nov."},
         {"dec."}
-    }; 
-    
+    };
+
     formPrincipal guiPrincipal;
     RaportTahografForm tahografForm;
     EvenimenteForm evenimenteForm;
-    static String RAPORT_NOAPTE="rapnoapte";
-    static String RAPORT_TIP_1="rt1";
-    
-    static int oreNoapte[] = {22, 23, 24,0, 1, 2, 3, 4, 5};
+    static String RAPORT_NOAPTE = "rapnoapte";
+    static String RAPORT_TIP_1 = "rt1";
+
+    static int oreNoapte[] = {22, 23, 24, 0, 1, 2, 3, 4, 5};
 
     static Danaral getDanaral() {
         return ref;
     }
-    
-    public  Danaral() throws IOException {
+
+    public Danaral() throws IOException {
         cititor = new Cititor();
-        guiPrincipal=new formPrincipal();
+        guiPrincipal = new formPrincipal();
         ref = this;
-        tahografForm=new RaportTahografForm();
-        evenimenteForm=new EvenimenteForm();
+        tahografForm = new RaportTahografForm();
+        evenimenteForm = new EvenimenteForm();
         /*List<RaportZi> rapoarte = cititor.load("C:\\Users\\Manel\\Desktop\\exemplu.html");
 
         cititor.sort(rapoarte);*/
     }
-    
-    void openGUI(){
+
+    void openGUI() {
         guiPrincipal.setLocationRelativeTo(null);
         guiPrincipal.setVisible(true);
     }
@@ -103,23 +105,22 @@ public class Danaral {
         }
         return x;
     }
-    static String PATH="";
-    static String kilometriRegex="activityDayDistance: ?(\\d\\d?\\d?\\d?\\d?\\d?) km";
-    
-    static Dictionary dictionar=new Hashtable();
-    static String erori[]={"cel mai grav eveniment într-una din ultimele 10 zile în care a survenit",
-    "unul dintre cele mai grave 5 evenimente care au survenit în ultimele 365 de zile",
-    "evenimentul cu cea mai mare durată într-una din ultimele 10 zile în care a survenit",
-    "unul dintre cele mai recente (sau ultimele) 10 evenimente sau anomalii",
-    "primul eveniment sau prima anomalie care a survenit după ultima calibrare",
-    "ultimul eveniment într-una din ultimele 10 zile în care a survenit"};
-    
-    
-    final static int DIAGRAMA_2_INIT_VAL=80000;
-    final static int DIAGRAMA_1_INIT_VAL=90000;
-    static int DIAGRAMA_1=DIAGRAMA_1_INIT_VAL;
-    static int DIAGRAMA_2=DIAGRAMA_2_INIT_VAL;
-    
+    static String PATH = "";
+    static String kilometriRegex = "activityDayDistance: ?(\\d\\d?\\d?\\d?\\d?\\d?) km";
+
+    static Dictionary dictionar = new Hashtable();
+    static String erori[] = {"cel mai grav eveniment într-una din ultimele 10 zile în care a survenit",
+        "unul dintre cele mai grave 5 evenimente care au survenit în ultimele 365 de zile",
+        "evenimentul cu cea mai mare durată într-una din ultimele 10 zile în care a survenit",
+        "unul dintre cele mai recente (sau ultimele) 10 evenimente sau anomalii",
+        "primul eveniment sau prima anomalie care a survenit după ultima calibrare",
+        "ultimul eveniment într-una din ultimele 10 zile în care a survenit"};
+
+    final static int DIAGRAMA_2_INIT_VAL = 80000;
+    final static int DIAGRAMA_1_INIT_VAL = 90000;
+    static int DIAGRAMA_1 = DIAGRAMA_1_INIT_VAL;
+    static int DIAGRAMA_2 = DIAGRAMA_2_INIT_VAL;
+
     /**
      * @param args the command line arguments
      * @throws java.io.IOException
@@ -127,7 +128,7 @@ public class Danaral {
      * @throws java.net.URISyntaxException
      */
     public static void main(String[] args) throws IOException, URISyntaxException, DocumentException {
-        
+
         dictionar.put("General events: Motion data error", "Eroare senzori miscare");
         dictionar.put("General events: Power supply interruption", "Intreruperea alimentarii");
         dictionar.put("General events: Driving without an appropriate card", "Conducere fara card");
@@ -138,50 +139,66 @@ public class Danaral {
         dictionar.put("Recording equipment faults: No further details", "eroare echipament de inregistrare fara detalii");
         dictionar.put("Recording equipment faults: Sensor fault", "problema senzor");
         dictionar.put("General events: Card insertion while driving", "inserare card in timpul condusului");
-        dictionar.put("Vehicle unit related security breach attempt events: Hardware sabotage", 
+        dictionar.put("Vehicle unit related security breach attempt events: Hardware sabotage",
                 "Securitatea vehiculului: sabotaj hardware");
         dictionar.put("General events: Last card session not correctly closed", "ultima sesiune a cardului nu a fost incheiata corect");
-        
-        
-        
-        dictionar.put("the most serious event for one of the last 10 days of occurrence", 
+
+        dictionar.put("the most serious event for one of the last 10 days of occurrence",
                 "cel mai grav eveniment într-una din ultimele 10 zile în care a survenit");
-        dictionar.put("one of the 5 longest events over the last 365 days", 
+        dictionar.put("one of the 5 longest events over the last 365 days",
                 "unul dintre cele mai grave 5 evenimente care au survenit în ultimele 365 de zile");
-        dictionar.put("the longest event for one of the last 10 days of occurrence", 
+        dictionar.put("the longest event for one of the last 10 days of occurrence",
                 "evenimentul cu cea mai mare durată într-una din ultimele 10 zile în care a survenit");
-        dictionar.put("one of the 10 most recent (or last) events or faults", 
+        dictionar.put("one of the 10 most recent (or last) events or faults",
                 "unul dintre cele mai recente (sau ultimele) 10 evenimente sau anomalii");
-        dictionar.put("the first event or fault having occurred after the last calibration", 
+        dictionar.put("the first event or fault having occurred after the last calibration",
                 "primul eveniment sau prima anomalie care a survenit după ultima calibrare");
-        dictionar.put("the last event for one of the last 10 days of occurrence", 
+        dictionar.put("the last event for one of the last 10 days of occurrence",
                 "ultimul eveniment într-una din ultimele 10 zile în care a survenit");
-        
-        
+
         Danaral danaral = new Danaral();
         danaral.openGUI();
         System.out.println(Arrays.toString(args));
-        if (args.length==1){
+        if (args.length == 1) {
             System.out.println(args[0]);
             danaral.cititor.load(args[0]);
             danaral.guiPrincipal.updateUIFromBatch();
             System.out.println("Am incarcat fisierul");
         }
         PATH = get_path("Program.jar");
-       
-        
-        
+
         /*Danaral danaral = new Danaral();
         String l1="C:\\Users\\Manel\\Desktop\\data danaral\\BH-25-RLC Mon Dec 16 2019.xhtml";
         String l2="C:\\Users\\Manel\\Desktop\\data danaral\\ES HF 758 Sat Feb 15 2020.xhtml";
         String l3="C:\\Users\\Manel\\Desktop\\data danaral\\cazuri doi soferi\\BH-25-RLC Tue Feb 13 2018.xhtml";
         danaral.cititor.load(l1);
         System.out.println("gata cititu");*/
+    }
+
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d H:m:s z");
+    
+    /**
+     * @param oraSiMinute format hh:mm sau h:m
+     * @param data format mm:dd:yyyy
+     */
+    public String GetOraConvertedToRomanianTime(String oraSiMinute, String data) {
+        String[] oraSiMinuteSplitted = oraSiMinute.split(":");
+        int ora = Integer.parseInt(oraSiMinuteSplitted[0]);
+        int minute = Integer.parseInt(oraSiMinuteSplitted[1]);
+
+        String[] dataSplitted = data.split(":");
+        int luna = Integer.parseInt(dataSplitted[0]);
+        int zi = Integer.parseInt(dataSplitted[1]);
+        int an = Integer.parseInt(dataSplitted[2]);
         
+        ZonedDateTime utcDateTime = ZonedDateTime.parse(String.format("%d-%d-%d %d:%d:0 UTC", an, luna, zi, ora, minute), formatter);
+        ZonedDateTime romanianDateTime = utcDateTime.withZoneSameInstant(ZoneId.of("Europe/Bucharest"));
+
+        return romanianDateTime.format(DateTimeFormatter.ofPattern("H:mm"));
     }
 
     //<editor-fold desc="dump" defaultstate="collapsed">
-            /*
+    /*
         java.nio.file.Path path = Paths.get(Danaral.class.getResource("noapte.png").toURI());
 
         Document document = new Document();
@@ -191,15 +208,10 @@ public class Danaral {
         document.add(img);
 
         document.close();*/
-
-
-       /* System.out.println(Pattern.matches(kilometriRegex, 
+ /* System.out.println(Pattern.matches(kilometriRegex, 
                                             "Activities on Fri Jan 25 2019: activityRecordPreviousLength: 14 Bytes activityRecordLength: 44 Bytes activityRecordDate: Fri Jan 25 2019 activityPresenceCounter: 2 activityDayDistance: 425 km Visualization: break/rest, from 0:0"));
-        */
-        
-       
-
-        /*
+     */
+ /*
         RaportZi oziulica = rapoarte.get(11);
         Object [][]data=new Object[oziulica.programCondus.size()][6];
         for (int i=0;i<data.length;i++){
@@ -221,7 +233,6 @@ public class Danaral {
         table.setDefaultRenderer(Object.class, centerRenderer);
         f.add(new JScrollPane(table));
         f.setVisible(true);
-         */
+     */
     //</editor-fold>
-
 }
