@@ -102,9 +102,9 @@ public class ActivitateCondus {
      */
     public ActivitateCondus[] desparteNoapteSiZi() {
         ActivitateCondus[] ar = new ActivitateCondus[2];
-        ActivitateCondus noaptea = new ActivitateCondus(this.oraInceput, "06:00",
+        ActivitateCondus noaptea = new ActivitateCondus(this.oraInceput, "07:00",
                 true, this.work, dataCalendaristica);
-        ActivitateCondus ziua = new ActivitateCondus("06:00", this.oraIncheiere,
+        ActivitateCondus ziua = new ActivitateCondus("07:00", this.oraIncheiere,
                 false, this.work, dataCalendaristica);
         ar[0] = noaptea;
         ar[1] = ziua;
@@ -113,9 +113,9 @@ public class ActivitateCondus {
 
     public ActivitateCondus[] desparteZiSiNoapte() {
         ActivitateCondus[] ar = new ActivitateCondus[2];
-        ActivitateCondus ziua = new ActivitateCondus(this.oraInceput, "22:00",
+        ActivitateCondus ziua = new ActivitateCondus(this.oraInceput, "00:00",
                 false, this.work, dataCalendaristica);
-        ActivitateCondus noaptea = new ActivitateCondus("22:00", this.oraIncheiere,
+        ActivitateCondus noaptea = new ActivitateCondus("00:00", this.oraIncheiere,
                 true, this.work, dataCalendaristica);
 
         ar[0] = noaptea;

@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -37,6 +38,8 @@ import javax.swing.table.DefaultTableModel;
  * @author Manel
  */
 public class RaportTuraNoapte extends javax.swing.JFrame {
+
+    public static final long MINIM_ORE_CONDUSE_NOAPTEA = TimeUnit.HOURS.toMillis(4);
 
     /**
      * Creates new form RaportTuraNoapte
@@ -114,7 +117,7 @@ public class RaportTuraNoapte extends javax.swing.JFrame {
         return luni[index];
     }
 
-   /* public String getTotalOreConduseNoaptea_LunaAceasta(List<RaportZi> rapoarte) {
+    /* public String getTotalOreConduseNoaptea_LunaAceasta(List<RaportZi> rapoarte) {
         long total = 0;
         for (RaportZi raport : rapoarte) {
             long ore = TimeUnit.HOURS.toMillis(Integer.valueOf(raport.getTotalOreConduseNoaptea().replace("h", "").split(":")[0]));
@@ -138,7 +141,7 @@ public class RaportTuraNoapte extends javax.swing.JFrame {
         return "";
     }*/
     private void addTableHeader(PdfPTable table) {
-        Stream.of("Data", "Ore conducere", "Ore alta munca","Total")
+        Stream.of("Data", "Ore conducere", "Ore alta munca", "Total")
                 .forEach(columnTitle -> {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(BaseColor.GRAY);
@@ -150,60 +153,58 @@ public class RaportTuraNoapte extends javax.swing.JFrame {
 
     private void addRows(PdfPTable table, List<RaportZi> rapoarte) {
         for (int i = 0; i < rapoarte.size(); i++) {
-
             PdfPCell header = new PdfPCell();
-            header.setBackgroundColor(i%2==0 ? BaseColor.WHITE:BaseColor.LIGHT_GRAY);
+            header.setBackgroundColor(i % 2 == 0 ? BaseColor.WHITE : BaseColor.LIGHT_GRAY);
             header.setPhrase(new Phrase(rapoarte.get(i).data));
             table.addCell(header);
-            
-            header.setPhrase(new Phrase(rapoarte.get(i).getTotalOreConduseNoaptea()));
-            table.addCell(header);
-            
-            header.setPhrase(new Phrase(rapoarte.get(i).getTotalOreAltaMuncaNoaptea()));
-            table.addCell(header);
-            
-            header.setPhrase(new Phrase(rapoarte.get(i).getTotalOreLucrateNoaptea()));
+
+            String oreLucrateNoaptea = rapoarte.get(i).getTotalOreLucrateNoaptea();
+            String oreConduseNoaptea = rapoarte.get(i).getTotalOreConduseNoaptea();
+            String oreAltaMuncaNoaptea = rapoarte.get(i).getTotalOreAltaMuncaNoaptea();
+
+            String[] oreLucrateNoapteaSplitted = oreLucrateNoaptea.replace("h", "").split(":");
+            long totalMilisecundeLucrateNoaptea = TimeUnit.HOURS.toMillis(Integer.valueOf(oreLucrateNoapteaSplitted[0])) + TimeUnit.MINUTES.toMillis(Integer.valueOf(oreLucrateNoapteaSplitted[1]));
+
+            if (totalMilisecundeLucrateNoaptea < MINIM_ORE_CONDUSE_NOAPTEA) {
+                oreLucrateNoaptea = oreAltaMuncaNoaptea = oreConduseNoaptea = "00:00h";
+            }
+
+            header.setPhrase(new Phrase(oreConduseNoaptea));
             table.addCell(header);
 
-            /*table.addCell(raport.data);
-            table.addCell(raport.getTotalOreConduseNoaptea());
-            table.addCell(raport.getTotalOreAltaMuncaNoaptea());
-            table.addCell(raport.getTotalOreLucrateNoaptea());*/
+            header.setPhrase(new Phrase(oreAltaMuncaNoaptea));
+            table.addCell(header);
+
+            header.setPhrase(new Phrase(oreLucrateNoaptea));
+            table.addCell(header);
         }
     }
-        private void addRows(PdfPTable table, String data,String totalCondus,String totalAltaMunca,String totalLucru) {
-        
 
-            PdfPCell header = new PdfPCell();
-            header.setBackgroundColor(BaseColor.GRAY);
-            header.setPhrase(new Phrase(data));
-            table.addCell(header);
-            
-            header.setPhrase(new Phrase(totalCondus));
-            table.addCell(header);
-            
-            header.setPhrase(new Phrase(totalAltaMunca));
-            table.addCell(header);
-            
-            header.setPhrase(new Phrase(totalLucru));
-            table.addCell(header);
+    private void addRows(PdfPTable table, String data, String totalCondus, String totalAltaMunca, String totalLucru) {
+        PdfPCell header = new PdfPCell();
+        header.setBackgroundColor(BaseColor.GRAY);
+        header.setPhrase(new Phrase(data));
+        table.addCell(header);
 
-            /*table.addCell(raport.data);
-            table.addCell(raport.getTotalOreConduseNoaptea());
-            table.addCell(raport.getTotalOreAltaMuncaNoaptea());
-            table.addCell(raport.getTotalOreLucrateNoaptea());*/
-        
+        header.setPhrase(new Phrase(totalCondus));
+        table.addCell(header);
+
+        header.setPhrase(new Phrase(totalAltaMunca));
+        table.addCell(header);
+
+        header.setPhrase(new Phrase(totalLucru));
+        table.addCell(header);
     }
-    
-    void savePDF(String numeFisier){
+
+    void savePDF(String numeFisier) {
         try {
             Document document = new Document();
-            FileOutputStream fileOutputStream = new FileOutputStream(Danaral.PATH+numeFisier+".pdf");
+            FileOutputStream fileOutputStream = new FileOutputStream(Danaral.PATH + numeFisier + ".pdf");
             PdfWriter.getInstance(document, fileOutputStream);
             document.open();
 
-            Paragraph preface = new Paragraph("Activitatile soferului "+Danaral.getDanaral().cititor.getSofer() +" pe tura de noapte - 22:00 - 06:00 \nDe la data: "
-                    +rapoarte.get(0).data+"     Pana la data: "+rapoarte.get(rapoarte.size()-1).data);
+            Paragraph preface = new Paragraph("Activitatile soferului " + Danaral.getDanaral().cititor.getSofer() + " pe tura de noapte - 00:00 - 07:00 \nDe la data: "
+                    + rapoarte.get(0).data + "     Pana la data: " + rapoarte.get(rapoarte.size() - 1).data);
 
             preface.setSpacingAfter(20f);
             preface.setAlignment(Element.ALIGN_CENTER);
@@ -233,7 +234,7 @@ public class RaportTuraNoapte extends javax.swing.JFrame {
             Logger.getLogger(RaportTuraNoapte.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        
+
     public void set(List<RaportZi> rapoarte) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         setTitle("Luna " + extractLuna(rapoarte.get(0).data) + " a anului "
@@ -256,11 +257,6 @@ public class RaportTuraNoapte extends javax.swing.JFrame {
         });
         jTable1.setModel(model);
         setSize(getWidth(), (rapoarte.size() + 3) * jTable1.getRowHeight() + 60);
-
-        
-        
-
-
 
         setVisible(true);
     }

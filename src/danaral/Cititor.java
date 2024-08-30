@@ -5,7 +5,6 @@
  */
 package danaral;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -36,14 +35,13 @@ public class Cititor {
     private String numeSofer;
     private String primaInregistrare;
     private String ultimaInregistrare;
-    
+
     /**
-     * Asta nu prea ar trebui sa il folosesti pt ca apar mai multe numere de inmatriculare in fisier,
-     * mai bine foloseste {@link #numereInmatriculare}
+     * Asta nu prea ar trebui sa il folosesti pt ca apar mai multe numere de
+     * inmatriculare in fisier, mai bine foloseste {@link #numereInmatriculare}
      */
     private String numarInmatriculare;
-   
-    
+
     List<RaportZi> rapoarteZilnice = new ArrayList<>();
     List<RaportZiTahograf> rapoarteZilniceTahograf = new ArrayList<>();
 
@@ -183,6 +181,13 @@ public class Cititor {
     public static String getOreConduseNoaptea(List<RaportZi> rapoarte) {
         long total = 0;
         for (RaportZi raport : rapoarte) {
+            String[] totalOreLucrateNoapteaSplitted = raport.getTotalOreLucrateNoaptea().replace("h", "").split(":");
+            long totalOreLucrateNoaptea = TimeUnit.HOURS.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[0])) + TimeUnit.MINUTES.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[1]));
+
+            if (totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
+                continue;
+            }
+
             int ore = Integer.valueOf(raport.getTotalOreConduseNoaptea().replace("h", "").split(":")[0]);
             int minute = Integer.valueOf(raport.getTotalOreConduseNoaptea().replace("h", "").split(":")[1]);
             long timp = TimeUnit.HOURS.toMillis(ore) + TimeUnit.MINUTES.toMillis(minute);
@@ -207,6 +212,13 @@ public class Cititor {
     public static String getOreAltaMuncaNoaptea(List<RaportZi> rapoarte) {
         long total = 0;
         for (RaportZi raport : rapoarte) {
+            String[] totalOreLucrateNoapteaSplitted = raport.getTotalOreLucrateNoaptea().replace("h", "").split(":");
+            long totalOreLucrateNoaptea = TimeUnit.HOURS.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[0])) + TimeUnit.MINUTES.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[1]));
+
+            if (totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
+                continue;
+            }
+
             int ore = Integer.valueOf(raport.getTotalOreAltaMuncaNoaptea().replace("h", "").split(":")[0]);
             int minute = Integer.valueOf(raport.getTotalOreAltaMuncaNoaptea().replace("h", "").split(":")[1]);
             long timp = TimeUnit.HOURS.toMillis(ore) + TimeUnit.MINUTES.toMillis(minute);
@@ -231,6 +243,13 @@ public class Cititor {
     public static String getOreLucrateNoaptea(List<RaportZi> rapoarte) {
         long total = 0;
         for (RaportZi raport : rapoarte) {
+            String[] totalOreLucrateNoapteaSplitted = raport.getTotalOreLucrateNoaptea().replace("h", "").split(":");
+            long totalOreLucrateNoaptea = TimeUnit.HOURS.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[0])) + TimeUnit.MINUTES.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[1]));
+
+            if (totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
+                continue;
+            }
+
             int ore = Integer.valueOf(raport.getTotalOreLucrateNoaptea().replace("h", "").split(":")[0]);
             int minute = Integer.valueOf(raport.getTotalOreLucrateNoaptea().replace("h", "").split(":")[1]);
             long timp = TimeUnit.HOURS.toMillis(ore) + TimeUnit.MINUTES.toMillis(minute);
@@ -256,7 +275,7 @@ public class Cititor {
         int km = 0;
         for (RaportZiTahograf raport : rapoarte) {
             try {
-                km+=Integer.valueOf(raport.getKmTotali());
+                km += Integer.valueOf(raport.getKmTotali());
             } catch (Exception ex) {
 
             }
@@ -264,15 +283,15 @@ public class Cititor {
         return Integer.toString(km);
     }
 
-    public static String getTotalOreConduse(List<RaportZiTahograf>rapoarte){
-        String total="00:00";
-        long TOT=0;
-        for (RaportZiTahograf raport:rapoarte){
-            try{
-                long tot=TimeUnit.HOURS.toMillis(Long.valueOf(raport.timpTotal.split(":")[0]))
-                        +TimeUnit.MINUTES.toMillis(Long.valueOf(raport.timpTotal.split(":")[1]));
-                TOT+=tot;
-            }catch(Exception ex) {
+    public static String getTotalOreConduse(List<RaportZiTahograf> rapoarte) {
+        String total = "00:00";
+        long TOT = 0;
+        for (RaportZiTahograf raport : rapoarte) {
+            try {
+                long tot = TimeUnit.HOURS.toMillis(Long.valueOf(raport.timpTotal.split(":")[0]))
+                        + TimeUnit.MINUTES.toMillis(Long.valueOf(raport.timpTotal.split(":")[1]));
+                TOT += tot;
+            } catch (Exception ex) {
 
             }
         }
@@ -282,7 +301,7 @@ public class Cititor {
             ore++;
             minute /= 60;
         }*/
-        minute%=60;
+        minute %= 60;
         String oreString = ore + "";
         String minuteString = minute + "";
         if (ore < 10) {
@@ -291,7 +310,7 @@ public class Cititor {
         if (minute < 10) {
             minuteString = "0" + minuteString;
         }
-        total=oreString+":"+minuteString;
+        total = oreString + ":" + minuteString;
         return total;
     }
 
@@ -309,11 +328,11 @@ public class Cititor {
         }
         int ore = (int) (TimeUnit.MILLISECONDS.toHours(TOT));
         int minute = (int) (TimeUnit.MILLISECONDS.toMinutes(TOT));
-       /* while (minute > 60) {
+        /* while (minute > 60) {
             ore++;
             minute /= 60;
         }*/
-        minute%=60;
+        minute %= 60;
         String oreString = ore + "";
         String minuteString = minute + "";
         if (ore < 10) {
@@ -366,9 +385,9 @@ public class Cititor {
         String ar[] = line.split(" ");
         try {
             return RaportZi.extrageLuna(ar[9]) + ":" + ar[10] + ":" + ar[11];
-        }catch(DateTimeException ex){
-            return RaportZi.extrageLuna(ar[8])+":"+ar[9]+":"+ar[10];
-        }catch(Exception ex){
+        } catch (DateTimeException ex) {
+            return RaportZi.extrageLuna(ar[8]) + ":" + ar[9] + ":" + ar[10];
+        } catch (Exception ex) {
             return "eroare format";
         }
     }
@@ -377,24 +396,25 @@ public class Cititor {
 
     }
     List<String> numereInmatriculare;
-    
-    private List<Cititor>cititori=new ArrayList<>();;
+
+    private List<Cititor> cititori = new ArrayList<>();
+    ;
     private String soferiString;
-    
-    private RaportZi getRaportZiByDate(String date){
-        for (RaportZi raport:rapoarteZilnice){
-            if (raport.data.equals(date)){
+
+    private RaportZi getRaportZiByDate(String date) {
+        for (RaportZi raport : rapoarteZilnice) {
+            if (raport.data.equals(date)) {
                 return raport;
             }
         }
         return null;
     }
-    
+
     int loadTahograf(Document doc) {
         List<Element> liUri = new ArrayList<>();
         Elements lis = doc.select("ul");
-        Elements chiarLiuri=doc.select("li");
-        numereInmatriculare=new ArrayList<>();
+        Elements chiarLiuri = doc.select("li");
+        numereInmatriculare = new ArrayList<>();
         for (Element li : lis) {
             if (li.text().contains("timeReal")) {
                 liUri.add(li);
@@ -402,22 +422,22 @@ public class Cititor {
         }
 
         Elements h3s = doc.select("li");
-        Elements evenimente_vuEventRecords=null;
-        Elements evenimente_vuFaultRecords=null;
-        Elements evenimente_overSpeed=null;
-        Elements vuEventRecordsElements=new Elements();
-        Elements vuFaultRecordsElements=new Elements();
-        Elements overSpeeds=new Elements();
-        
-        for (Element el:h3s){
-            if (el.text().contains("vuEventRecords") && evenimente_vuEventRecords==null){
+        Elements evenimente_vuEventRecords = null;
+        Elements evenimente_vuFaultRecords = null;
+        Elements evenimente_overSpeed = null;
+        Elements vuEventRecordsElements = new Elements();
+        Elements vuFaultRecordsElements = new Elements();
+        Elements overSpeeds = new Elements();
+
+        for (Element el : h3s) {
+            if (el.text().contains("vuEventRecords") && evenimente_vuEventRecords == null) {
                 evenimente_vuEventRecords = el.select("li");
             }
-            if (el.text().contains("vuFaultRecords") && evenimente_vuFaultRecords==null){
-                evenimente_vuFaultRecords=el.select("li");
+            if (el.text().contains("vuFaultRecords") && evenimente_vuFaultRecords == null) {
+                evenimente_vuFaultRecords = el.select("li");
             }
-            if (el.text().contains("vuOverspeedingEventRecords") && evenimente_overSpeed==null){
-                evenimente_overSpeed=el.select("li");
+            if (el.text().contains("vuOverspeedingEventRecords") && evenimente_overSpeed == null) {
+                evenimente_overSpeed = el.select("li");
             }
         }
         for (int i = evenimente_vuEventRecords.size() - 1; i > 0; i--) {
@@ -450,45 +470,45 @@ public class Cititor {
             //System.out.println(overSpeeds.get(i).text()+"\n\n\n");
             vuOverspeedingEventRecords.add(new OverSpeed(overSpeeds.get(i), i));
         }
-        
+
         if (Danaral.DEBUG) {
             System.out.println("Printare evenimente");
-            
-            System.out.println("vuFaultRecords "+vuFaultRecords.size());
-            for (Eveniment e:vuFaultRecords){
+
+            System.out.println("vuFaultRecords " + vuFaultRecords.size());
+            for (Eveniment e : vuFaultRecords) {
                 System.out.println(e);
             }
-            System.out.println("\nvuEventRecords "+vuEventRecords.size());
-            for (Eveniment e:vuEventRecords){
+            System.out.println("\nvuEventRecords " + vuEventRecords.size());
+            for (Eveniment e : vuEventRecords) {
                 System.out.println(e);
             }
-            System.out.println("\nvuOverspeedingEventRecords "+vuOverspeedingEventRecords.size());
+            System.out.println("\nvuOverspeedingEventRecords " + vuOverspeedingEventRecords.size());
             for (OverSpeed ev : vuOverspeedingEventRecords) {
                 System.out.println(ev);
             }
         }
         //liUri.forEach(el -> System.out.println(el));
-        
-        List<String>soferi=new ArrayList<>();
-        List<RaportZiTahograf>rapoarte=new ArrayList<>();
+
+        List<String> soferi = new ArrayList<>();
+        List<RaportZiTahograf> rapoarte = new ArrayList<>();
         for (Element el : liUri) {
             RaportZiTahograf raport = new RaportZiTahograf(el.select("li"));
             raport.create();
-            if (!soferi.contains(raport.conducator) && raport.conducator!=null){
+            if (!soferi.contains(raport.conducator) && raport.conducator != null) {
                 soferi.add(raport.conducator);
             }
             rapoarte.add(raport);
         }
-        soferiString="";
-        for (String s:soferi){
-            soferiString+=s+"\n";
+        soferiString = "";
+        for (String s : soferi) {
+            soferiString += s + "\n";
         }
-        InterogareCardSoferForm interogareCardSoferForm=new InterogareCardSoferForm();
-        
-        soferi.forEach(sofer->{
-            JButton incarcSofer=new JButton("Incarca cardul lui "+sofer);
+        InterogareCardSoferForm interogareCardSoferForm = new InterogareCardSoferForm();
+
+        soferi.forEach(sofer -> {
+            JButton incarcSofer = new JButton("Incarca cardul lui " + sofer);
             incarcSofer.setFocusable(false);
-            
+
             incarcSofer.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -510,7 +530,7 @@ public class Cititor {
                             Logger.getLogger(Cititor.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    
+
                 }
             });
             interogareCardSoferForm.add(incarcSofer);
@@ -537,10 +557,10 @@ public class Cititor {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                
-                Danaral.DIAGRAMA_1=getNrDiagrama(rapoarte.get(0).data,0);
-                Danaral.DIAGRAMA_2=getNrDiagrama(rapoarte.get(0).data,0);
-                List<RaportZiTahograf>listaFinala=new ArrayList<>();
+
+                Danaral.DIAGRAMA_1 = getNrDiagrama(rapoarte.get(0).data, 0);
+                Danaral.DIAGRAMA_2 = getNrDiagrama(rapoarte.get(0).data, 0);
+                List<RaportZiTahograf> listaFinala = new ArrayList<>();
                 for (RaportZiTahograf raport : rapoarte) {
                     if (raport.soferi.size() == 1) {
                         for (Cititor cititor : cititori) {
@@ -555,14 +575,14 @@ public class Cititor {
                                             raport.oraIncheiere = "";
                                         }
                                         raport.kilometriInceput = Integer.valueOf(raport.kilometriFinali) - Integer.valueOf(raportSofer.getKilometri()) + "";
-                                        raport.kilometriCondusi_sofer=raportSofer.getKilometri();
+                                        raport.kilometriCondusi_sofer = raportSofer.getKilometri();
                                         raport.nrDiagrama = Danaral.DIAGRAMA_1;
-                                        raport.oreConducere_sofer=raportSofer.getTotalOreLucrate();
-                                        raport.oreOdihna_sofer=raportSofer.getTotalOreOdihna();
-                                        raport.oreOdihna_sofer=raport.oreOdihna_sofer.equals("00:00h")? "24:00h":raport.oreOdihna_sofer;
+                                        raport.oreConducere_sofer = raportSofer.getTotalOreLucrate();
+                                        raport.oreOdihna_sofer = raportSofer.getTotalOreOdihna();
+                                        raport.oreOdihna_sofer = raport.oreOdihna_sofer.equals("00:00h") ? "24:00h" : raport.oreOdihna_sofer;
                                         Danaral.DIAGRAMA_1++;
                                         listaFinala.add(raport);
-                                        
+
                                     }
                                 }
                             }
@@ -570,14 +590,14 @@ public class Cititor {
                     } else if (raport.soferi.size() == 2) {
                         System.out.println("Atentiune, doi soferi " + raport.data);
                         if (cititori.size() < 2) {
-                            int x=JOptionPane.showConfirmDialog(null, "Nu s au citit cardurile ambilor soferi, in data de "
+                            int x = JOptionPane.showConfirmDialog(null, "Nu s au citit cardurile ambilor soferi, in data de "
                                     + raport.data + " au condus " + soferi);
-                            if (x==JOptionPane.CANCEL_OPTION){
+                            if (x == JOptionPane.CANCEL_OPTION) {
                                 break;
                             }
                         } else if (cititori.size() > 2) {
-                            int x=JOptionPane.showConfirmDialog(null, "S au citit prea multi soferi");
-                            if (x==JOptionPane.CANCEL_OPTION){
+                            int x = JOptionPane.showConfirmDialog(null, "S au citit prea multi soferi");
+                            if (x == JOptionPane.CANCEL_OPTION) {
                                 break;
                             }
                         } else {
@@ -596,11 +616,11 @@ public class Cititor {
                                 raportTahografSofer1.kilometriCondusi_sofer = ziCardS1.kilometri;
                                 raportTahografSofer1.oreConducere_sofer = ziCardS1.getTotalOreLucrate();
                                 raportTahografSofer1.oreOdihna_sofer = ziCardS1.getTotalOreOdihna();
-                                raportTahografSofer1.conducator=cititorSofer1.numeSofer;
+                                raportTahografSofer1.conducator = cititorSofer1.numeSofer;
                             } else {
-                                int x=JOptionPane.showConfirmDialog(null, "Nu am gasit data" + raport.data + " in cardul soferului "
-                                        + cititorSofer1.numeSofer+" card dorit:"+soferi.get(0));
-                                if (x==JOptionPane.CANCEL_OPTION){
+                                int x = JOptionPane.showConfirmDialog(null, "Nu am gasit data" + raport.data + " in cardul soferului "
+                                        + cititorSofer1.numeSofer + " card dorit:" + soferi.get(0));
+                                if (x == JOptionPane.CANCEL_OPTION) {
                                     break;
                                 }
                             }
@@ -644,14 +664,12 @@ public class Cititor {
                 listaFinala.forEach(el -> System.out.println(el));
             }
         });
-        
-        
-        
+
         interogareCardSoferForm.add(afisare);
-        JOptionPane.showMessageDialog(null, "Soferii care au condus acest vehicul in perioada "+
-                rapoarte.get(0).data+" "+rapoarte.get(rapoarte.size()-1).data+" : "+soferi.size()+"\n"+soferiString);
+        JOptionPane.showMessageDialog(null, "Soferii care au condus acest vehicul in perioada "
+                + rapoarte.get(0).data + " " + rapoarte.get(rapoarte.size() - 1).data + " : " + soferi.size() + "\n" + soferiString);
         interogareCardSoferForm.setVisible(true);
-        
+
         for (Element li : chiarLiuri) {
             Pattern numarInmatricularePattern = Pattern.compile(" vehicleRegistrationIdentification: (.....?.?.?.?.?.?.?.?.?.?) "
                     + "\\(.?.?.?.?.?.?.?.?.?.?.?.?.?\\)");
@@ -659,30 +677,31 @@ public class Cititor {
             while (m.find()) {
 
                 numarInmatriculare = m.group(1);
-                
+
                 if (!numereInmatriculare.contains(numarInmatriculare)) {
                     numereInmatriculare.add(numarInmatriculare);
                 }
             }
         }
-        numarInmatriculare=numereInmatriculare.get(numereInmatriculare.size()-1);
+        numarInmatriculare = numereInmatriculare.get(numereInmatriculare.size() - 1);
         /*
         Danaral.getDanaral().tahografForm.updateUI(rapoarteZilniceTahograf);
         Danaral.getDanaral().tahografForm.setVisible(true);
         Danaral.getDanaral().evenimenteForm.updateUI(vuFaultRecords,vuEventRecords,vuOverspeedingEventRecords);
         Danaral.getDanaral().evenimenteForm.setVisible(true);
-        */
+         */
         return 2;
     }
     CerereRaportLunar cerereRaportLunar;
 
-    List<RaportZi>getRaportZiCard(){
+    List<RaportZi> getRaportZiCard() {
         return rapoarteZilnice;
     }
-    List<RaportZiTahograf>getRaportZiTahograf(){
+
+    List<RaportZiTahograf> getRaportZiTahograf() {
         return rapoarteZilniceTahograf;
     }
-    
+
     int loadSilent(String locatieFisier) throws IOException {
         /*try{
             rapoarteZilnice.clear();
@@ -692,17 +711,17 @@ public class Cititor {
         File input = new File(locatieFisier);
         Document doc = Jsoup.parse(input, "UTF-8");
         try {
-            
+
             Elements lis = doc.select(Danaral.LI_TOKEN);
             Elements titluri = doc.select(Danaral.TITLE_TOKEN);
             List<Element> liUri = new ArrayList<>();
-            
+
             numeSofer = extrageNumeSofer(titluri.get(0).text());
             primaInregistrare = extragePrimaInregistrare(titluri.get(0).text());
-            try{
+            try {
                 ultimaInregistrare = extrageUltimaInregistrare(titluri.get(0).text());
-            }catch(ArrayIndexOutOfBoundsException ex){
-                ultimaInregistrare="Nu am putut extrage data ultimei inregistrari";
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                ultimaInregistrare = "Nu am putut extrage data ultimei inregistrari";
             }
 
             for (Element li : lis) {
@@ -724,7 +743,7 @@ public class Cititor {
                     raport.show();
                     System.out.println("");
                 }
-            } 
+            }
 
             return 1;
         } catch (Exception ex) {
@@ -734,36 +753,37 @@ public class Cititor {
         }
 
     }
-    boolean fisierTahograf(Document doc){
+
+    boolean fisierTahograf(Document doc) {
         Elements lis = doc.select(Danaral.LI_TOKEN);
-        for (Element el:lis){
-            if (el.text().contains("vehicleIdentificationNumber")){
+        for (Element el : lis) {
+            if (el.text().contains("vehicleIdentificationNumber")) {
                 return true;
             }
         }
         return false;
     }
-    
+
     int load(String locatieFisier) throws IOException {
         /*try{
             rapoarteZilnice.clear();
         }catch(Exception ex){
             
         }*/
-       
+
         File input = new File(locatieFisier);
         Document doc = Jsoup.parse(input, "UTF-8");
 
-         if (fisierTahograf(doc)){
+        if (fisierTahograf(doc)) {
             return loadTahograf(doc);
         }
-        
-        try{
+
+        try {
             rapoarteZilnice.clear();
-        }catch(Exception ex){
-            
+        } catch (Exception ex) {
+
         }
-         
+
         Elements lis = doc.select(Danaral.LI_TOKEN);
         Elements titluri = doc.select(Danaral.TITLE_TOKEN);
         List<Element> liUri = new ArrayList<>();
