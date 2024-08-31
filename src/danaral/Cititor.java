@@ -178,13 +178,13 @@ public class Cititor {
         return oreString + ":" + minuteString + "h";
     }
 
-    public static String getOreConduseNoaptea(List<RaportZi> rapoarte) {
+    public static String getOreConduseNoaptea(List<RaportZi> rapoarte, boolean isFromPdfContext) {
         long total = 0;
         for (RaportZi raport : rapoarte) {
             String[] totalOreLucrateNoapteaSplitted = raport.getTotalOreLucrateNoaptea().replace("h", "").split(":");
             long totalOreLucrateNoaptea = TimeUnit.HOURS.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[0])) + TimeUnit.MINUTES.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[1]));
 
-            if (totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
+            if (isFromPdfContext && totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
                 continue;
             }
 
@@ -209,18 +209,19 @@ public class Cititor {
         return oreString + ":" + minuteString + "h";
     }
 
-    public static String getOreAltaMuncaNoaptea(List<RaportZi> rapoarte) {
+    public static String getOreAltaMuncaNoaptea(List<RaportZi> rapoarte, boolean isFromPdfContext) {
         long total = 0;
         for (RaportZi raport : rapoarte) {
             String[] totalOreLucrateNoapteaSplitted = raport.getTotalOreLucrateNoaptea().replace("h", "").split(":");
             long totalOreLucrateNoaptea = TimeUnit.HOURS.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[0])) + TimeUnit.MINUTES.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[1]));
 
-            if (totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
+            if (isFromPdfContext && totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
                 continue;
             }
 
-            int ore = Integer.valueOf(raport.getTotalOreAltaMuncaNoaptea().replace("h", "").split(":")[0]);
-            int minute = Integer.valueOf(raport.getTotalOreAltaMuncaNoaptea().replace("h", "").split(":")[1]);
+            String[] totalOreAltaMuncaSplitted = raport.getTotalOreAltaMuncaNoaptea().replace("h", "").split(":");
+            int ore = Integer.valueOf(totalOreAltaMuncaSplitted[0]);
+            int minute = Integer.valueOf(totalOreAltaMuncaSplitted[1]);
             long timp = TimeUnit.HOURS.toMillis(ore) + TimeUnit.MINUTES.toMillis(minute);
             total += timp;
         }
@@ -230,23 +231,23 @@ public class Cititor {
         String oreString = Long.toString(ore);
         String minuteString = Long.toString(minute);
 
-        if (ore < 10) {
+        if (ore < 10 && ore > 0) {
             oreString = "0" + oreString;
         }
-        if (minute < 10) {
+        if (minute < 10 && minute > 0) {
             minuteString = "0" + minuteString;
         }
 
         return oreString + ":" + minuteString + "h";
     }
 
-    public static String getOreLucrateNoaptea(List<RaportZi> rapoarte) {
+    public static String getOreLucrateNoaptea(List<RaportZi> rapoarte, boolean isFromPdfContext) {
         long total = 0;
         for (RaportZi raport : rapoarte) {
             String[] totalOreLucrateNoapteaSplitted = raport.getTotalOreLucrateNoaptea().replace("h", "").split(":");
             long totalOreLucrateNoaptea = TimeUnit.HOURS.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[0])) + TimeUnit.MINUTES.toMillis(Integer.valueOf(totalOreLucrateNoapteaSplitted[1]));
 
-            if (totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
+            if (isFromPdfContext && totalOreLucrateNoaptea < RaportTuraNoapte.MINIM_ORE_CONDUSE_NOAPTEA) {
                 continue;
             }
 

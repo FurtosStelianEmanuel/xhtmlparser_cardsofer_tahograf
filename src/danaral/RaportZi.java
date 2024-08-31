@@ -359,11 +359,13 @@ public class RaportZi {
     }
 
     private boolean condusZiuaSiNoaptea(ActivitateCondus activitate) {
-        int ora_inc = Integer.valueOf(activitate.oraInceput.split(":")[0]);
-        int ora_fin = Integer.valueOf(activitate.oraIncheiere.split(":")[0]);
-        if (activitate.nocturn) {
+        if (!activitate.nocturn) {
             return false;
         }
+        
+        int ora_inc = Integer.valueOf(activitate.oraInceput.split(":")[0]);
+        int ora_fin = Integer.valueOf(activitate.oraIncheiere.split(":")[0]);
+        
         boolean condusZiua = true;
         boolean condusNoaptea = false;
         for (Integer ora : Danaral.oreNoapte) {
@@ -379,20 +381,27 @@ public class RaportZi {
     }
 
     private boolean condusNoapteaSiZiua(ActivitateCondus activitate) {
-        int ora_inc = Integer.valueOf(activitate.oraInceput.split(":")[0]);
-        int ora_fin = Integer.valueOf(activitate.oraIncheiere.split(":")[0]);
         if (!activitate.nocturn) {
             return false;
         }
-        boolean finalNocturn = false;
+
+        int ora_inc = Integer.valueOf(activitate.oraInceput.split(":")[0]);
+        int ora_fin = Integer.valueOf(activitate.oraIncheiere.split(":")[0]);
+
+        boolean inceputNoaptea = false;
+        boolean terminatZiua = true;
+
         for (Integer intreg : Danaral.oreNoapte) {
-            if (intreg == ora_fin) {
-                finalNocturn = true;
-                break;
+            if (intreg == ora_inc) {
+                inceputNoaptea = true;
             }
 
+            if (intreg == ora_fin) {
+                terminatZiua = false;
+            }
         }
-        return !finalNocturn;
+
+        return inceputNoaptea && terminatZiua;
     }
 
     public Date getDate() {
@@ -503,7 +512,7 @@ public class RaportZi {
         for (int i = 0; i < Danaral.ALTERNATIVE_LUNI.length; i++) {
             for (int j = 0; j < Danaral.ALTERNATIVE_LUNI[i].length; j++) {
                 if (Danaral.ALTERNATIVE_LUNI[i][j].equals(luna)) {
-                    String rezultat = ((i + 1) < 10 ? "0" : "")+(i+1);
+                    String rezultat = ((i + 1) < 10 ? "0" : "") + (i + 1);
                     return rezultat;
                 }
             }

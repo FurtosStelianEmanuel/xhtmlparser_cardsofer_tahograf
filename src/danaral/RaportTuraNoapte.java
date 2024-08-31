@@ -214,7 +214,7 @@ public class RaportTuraNoapte extends javax.swing.JFrame {
             addTableHeader(table);
             addRows(table, rapoarte);
 
-            addRows(table, "Sumar", Cititor.getOreConduseNoaptea(rapoarte), Cititor.getOreAltaMuncaNoaptea(rapoarte), Cititor.getOreLucrateNoaptea(rapoarte));
+            addRows(table, "Sumar", Cititor.getOreConduseNoaptea(rapoarte, true), Cititor.getOreAltaMuncaNoaptea(rapoarte, true), Cititor.getOreLucrateNoaptea(rapoarte, true));
             document.add(table);
             document.close();
 
@@ -250,9 +250,9 @@ public class RaportTuraNoapte extends javax.swing.JFrame {
         }
         model.addRow(new Object[]{
             "Sumar",
-            Cititor.getOreConduseNoaptea(rapoarte),
-            Cititor.getOreAltaMuncaNoaptea(rapoarte),
-            Cititor.getOreLucrateNoaptea(rapoarte)
+            Cititor.getOreConduseNoaptea(rapoarte, false),
+            Cititor.getOreAltaMuncaNoaptea(rapoarte, false),
+            Cititor.getOreLucrateNoaptea(rapoarte, false)
 
         });
         jTable1.setModel(model);

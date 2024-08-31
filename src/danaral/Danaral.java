@@ -64,7 +64,7 @@ public class Danaral {
     static String RAPORT_NOAPTE = "rapnoapte";
     static String RAPORT_TIP_1 = "rt1";
 
-    static int oreNoapte[] = {22, 23, 24, 0, 1, 2, 3, 4, 5};
+    static int oreNoapte[] = {24, 0, 1, 2, 3, 4, 5, 6};
 
     static Danaral getDanaral() {
         return ref;
@@ -176,7 +176,7 @@ public class Danaral {
     }
 
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d H:m:s z");
-    
+
     /**
      * @param oraSiMinute format hh:mm sau h:m
      * @param data format mm:dd:yyyy
@@ -190,7 +190,7 @@ public class Danaral {
         int luna = Integer.parseInt(dataSplitted[0]);
         int zi = Integer.parseInt(dataSplitted[1]);
         int an = Integer.parseInt(dataSplitted[2]);
-        
+
         ZonedDateTime utcDateTime = ZonedDateTime.parse(String.format("%d-%d-%d %d:%d:0 UTC", an, luna, zi, ora, minute), formatter);
         ZonedDateTime romanianDateTime = utcDateTime.withZoneSameInstant(ZoneId.of("Europe/Bucharest"));
 

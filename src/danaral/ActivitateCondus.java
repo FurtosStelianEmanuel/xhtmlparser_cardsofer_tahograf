@@ -53,13 +53,14 @@ public class ActivitateCondus {
             }
         }
 
-        return inceputNocturn;
+        return inceputNocturn || finalizareNocturna;
     }
 
     /**
      *
      * @param linie format : driving for 0:10 h: driving, from 3:42 to 3:52
      * (0:10 h): Card inserted, driver slot, single
+     * @param dataCalendaristica
      */
     public ActivitateCondus(String linie, String dataCalendaristica) {
         String ar[] = linie.split(" ");
@@ -113,7 +114,7 @@ public class ActivitateCondus {
 
     public ActivitateCondus[] desparteZiSiNoapte() {
         ActivitateCondus[] ar = new ActivitateCondus[2];
-        ActivitateCondus ziua = new ActivitateCondus(this.oraInceput, "00:00",
+        ActivitateCondus ziua = new ActivitateCondus(this.oraInceput, "24:00",
                 false, this.work, dataCalendaristica);
         ActivitateCondus noaptea = new ActivitateCondus("00:00", this.oraIncheiere,
                 true, this.work, dataCalendaristica);
